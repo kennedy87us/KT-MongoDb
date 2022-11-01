@@ -1,10 +1,10 @@
-name: CI for NuGet
+name: CI for NuGet .NET Core 3.1
 
 on:
   workflow_dispatch:
   create:
     branches: 
-      - release/**
+      - release/3.1.**
   push:
     branches:
     - main

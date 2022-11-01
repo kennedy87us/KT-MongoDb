@@ -1,25 +1,45 @@
-name: CI for NuGet .NET Core 3.1
+name: CI for NuGet
 
 on:
   workflow_dispatch:
   create:
     branches: 
       - release/3.1.**
+      - release/6.0.**
   push:
     branches:
     - main
+    - main_6
   pull_request:
     branches:
     - main
+    - main_6
 
 jobs:
-  build:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.checkBranch.outputs.runner }}
+      dotnet: ${{ steps.checkBranch.outputs.dotnet }}
+    steps:
+      - name: Check branch
+        id: checkBranch
+        run: |
+          if [[ ${{github.ref}} == 'refs/heads/main' || ${{github.ref}} == *'release/3.1'* ]]; then
+            echo "runner=ubuntu-20.04" >> $GITHUB_OUTPUT
+            echo "dotnet=3.1.x" >> $GITHUB_OUTPUT
+          else
+            echo "runner=ubuntu-22.04" >> $GITHUB_OUTPUT
+            echo "dotnet=6.0.x" >> $GITHUB_OUTPUT
+          fi
 
+  build:
+    needs: [setup]
+    runs-on: ${{ needs.setup.outputs.runner }}
+    
     env:
       BUILD_CONFIG: 'Release'
       SOLUTION: 'KT-*.sln'
-
-    runs-on: ubuntu-latest
 
     steps:
     - name: Init
@@ -42,7 +62,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 3.1.x
+        dotnet-version: ${{ needs.setup.outputs.dotnet }}
 
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION --no-restore

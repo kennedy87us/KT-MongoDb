@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kent.MongoDb", "src\Kent.MongoDb\Kent.MongoDb.csproj", "{43E14F40-20CE-4496-BA48-D757C8B84593}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kent.MongoDb.Abstractions", "src\Kent.MongoDb.Abstractions\Kent.MongoDb.Abstractions.csproj", "{33CE810C-5BFF-44B9-AEFB-19EB6928E934}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kent.MongoDb.Tests", "src\Kent.MongoDb.Tests\Kent.MongoDb.Tests.csproj", "{09CD377B-7E5E-4E39-83E5-0B36306EF6AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflow", "workflow", "{708965D8-3567-4E85-A7CE-E2F600238640}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\pipeline.yml = .github\workflows\pipeline.yml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{43E14F40-20CE-4496-BA48-D757C8B84593}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43E14F40-20CE-4496-BA48-D757C8B84593}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43E14F40-20CE-4496-BA48-D757C8B84593}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43E14F40-20CE-4496-BA48-D757C8B84593}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33CE810C-5BFF-44B9-AEFB-19EB6928E934}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33CE810C-5BFF-44B9-AEFB-19EB6928E934}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33CE810C-5BFF-44B9-AEFB-19EB6928E934}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33CE810C-5BFF-44B9-AEFB-19EB6928E934}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09CD377B-7E5E-4E39-83E5-0B36306EF6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09CD377B-7E5E-4E39-83E5-0B36306EF6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09CD377B-7E5E-4E39-83E5-0B36306EF6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09CD377B-7E5E-4E39-83E5-0B36306EF6AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8702E3DF-9750-42F0-889D-AAE97C0620AB}
+	EndGlobalSection
+EndGlobal

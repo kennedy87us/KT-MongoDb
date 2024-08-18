@@ -1,0 +1,76 @@
+name: CI for NuGet
+
+on:
+  workflow_dispatch:
+  create:
+    branches: 
+      - release/6.0.**
+  push:
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      runner: ${{ steps.checkBranch.outputs.runner }}
+      dotnet: ${{ steps.checkBranch.outputs.dotnet }}
+    steps:
+      - name: Check branch
+        id: checkBranch
+        run: |
+          echo "runner=ubuntu-22.04" >> $GITHUB_OUTPUT
+          echo "dotnet=6.0.x" >> $GITHUB_OUTPUT
+
+  build:
+    needs: [setup]
+    runs-on: ${{ needs.setup.outputs.runner }}
+    
+    env:
+      BUILD_CONFIG: 'Release'
+      SOLUTION: 'KT-*.sln'
+
+    steps:
+    - name: Init
+      uses: actions/checkout@v3
+
+    - name: Get Build Version
+      run: |
+        Import-Module .\build\GetBuildVersion.psm1
+        Write-Host $Env:GITHUB_REF
+        $version = GetBuildVersion -VersionString $Env:GITHUB_REF
+        echo "BUILD_VERSION=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      shell: pwsh
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.1.1
+
+    - name: Restore dependencies
+      run: nuget restore $SOLUTION
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ needs.setup.outputs.dotnet }}
+
+    - name: Build
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG -p:Version=$BUILD_VERSION --no-restore
+
+    - name: Run Test
+      run: dotnet test --configuration $BUILD_CONFIG --logger "trx;LogFileName=test-results.trx" || true
+
+    - name: Test Report
+      uses: dorny/test-reporter@v1
+      if: always()
+      with:
+        name: DotNET Tests
+        path: "**/test-results.trx"                            
+        reporter: dotnet-trx
+        fail-on-error: true
+
+    - name: Publish
+      if: startsWith(github.ref, 'refs/heads/release')
+      run: nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -SkipDuplicate -ApiKey ${{secrets.NUGET_API_KEY}}
